@@ -1,6 +1,7 @@
 package com.avish.MvcModule2.controllers;
 
 import com.avish.MvcModule2.dto.EmployeeDTO;
+import com.avish.MvcModule2.exception.ResourceNotFoundException;
 import com.avish.MvcModule2.services.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,8 @@ public class EmployeeController {
     @GetMapping(path = "/{employeeId}")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long employeeId) {
         Optional<EmployeeDTO> employeeDTO = employeeService.getEmployeeById(employeeId);
-        return employeeDTO.map(employeeDTO1 ->  ResponseEntity.ok().body(employeeDTO1)).orElse(ResponseEntity.notFound().build());
+        return employeeDTO.map(employeeDTO1 ->  ResponseEntity.ok().body(employeeDTO1))
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"+employeeId));
     }
 
     @GetMapping
@@ -40,10 +42,11 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeDTO, HttpStatus.CREATED);
     }
 
+
     @PutMapping(path = "/{employeeId}")
     public ResponseEntity<EmployeeDTO> updateEmployeeById(@RequestBody @Valid EmployeeDTO employeeDTO, @PathVariable Long employeeId) {
 
-        return ResponseEntity.ok(employeeService.updateEmmployeeById(employeeDTO,employeeId));
+        return ResponseEntity.ok(employeeService.updateEmployeeById(employeeId,employeeDTO));
     }
 
     @DeleteMapping(path = "/{employeeId}")

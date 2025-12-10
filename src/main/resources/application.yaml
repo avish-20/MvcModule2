@@ -7,7 +7,7 @@ spring:
       enabled: true
       path: /h2-console
 
-  datasource:
+  datasource :
     url: jdbc:h2:file:/Users/avish/Downloads/H2
     username: avishDB
     password: Avish123
@@ -15,4 +15,4 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-  logging-level: info
+
